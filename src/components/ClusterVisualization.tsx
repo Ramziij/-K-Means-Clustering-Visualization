@@ -4,20 +4,18 @@ interface ClusterVisualizationProps {
   data: number[][];
   labels: number[];
   centroids: number[][];
+  onClick: (event: React.MouseEvent<SVGSVGElement>) => void;
 }
 
 const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({
   data,
   labels,
   centroids,
+  onClick,
 }) => {
   const width = 600;
   const height = 400;
   const margin = 20;
-
-  const xScale = (value: number) => (value / 10) * (width - 2 * margin);
-  const yScale = (value: number) =>
-    height - margin - (value / 12) * (height - 2 * margin);
 
   const clusters: { [key: number]: number[][] } = {};
   for (let i = 0; i < labels.length; i++) {
@@ -29,12 +27,17 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({
   }
 
   return (
-    <svg width={width} height={height} style={{ border: '1px solid #ccc' }}>
+    <svg
+      width={width}
+      height={height}
+      style={{ border: '1px solid #ccc' }}
+      onClick={onClick}
+    >
       {data.map((point, index) => (
         <circle
           key={index}
-          cx={xScale(point[0]) + margin}
-          cy={yScale(point[1]) + margin}
+          cx={point[0] + margin}
+          cy={point[1] + margin}
           r={4}
           fill='rgba(75, 192, 192, 0.4)'
         />
@@ -42,8 +45,8 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({
       {centroids.map((centroid, index) => (
         <circle
           key={index}
-          cx={xScale(centroid[0]) + margin}
-          cy={yScale(centroid[1]) + margin}
+          cx={centroid[0] + margin}
+          cy={centroid[1] + margin}
           r={6}
           fill='rgba(255, 0, 0, 1)'
         />
@@ -52,10 +55,7 @@ const ClusterVisualization: React.FC<ClusterVisualizationProps> = ({
         <polyline
           key={index}
           points={cluster
-            .map(
-              (point) =>
-                `${xScale(point[0]) + margin},${yScale(point[1]) + margin}`
-            )
+            .map((point) => `${point[0] + margin},${point[1] + margin}`)
             .join(' ')}
           fill='none'
           stroke='rgba(75, 192, 192, 0.4)'

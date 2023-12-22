@@ -4,15 +4,15 @@ import ClusterVisualization from './components/ClusterVisualization';
 
 const App: React.FC = () => {
   const initialData: number[][] = [
-    [1, 2],
-    [5, 8],
-    [1.5, 1.8],
-    [8, 8],
-    [1, 0.6],
-    [9, 11],
+    [100, 200],
+    [500, 350],
+    [323, 300],
+    [400, 150],
+    [140, 300],
+    [97, 110],
   ];
 
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState<number[][]>(initialData);
   const [k, setK] = useState(2);
   const [labels, setLabels] = useState<number[]>([]);
   const [centroids, setCentroids] = useState<number[][]>([]);
@@ -22,11 +22,27 @@ const App: React.FC = () => {
     setLabels(labels);
     setCentroids(centroids);
   };
+  const handleSVGClick = (event: React.MouseEvent<SVGSVGElement>) => {
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    setData((prevData) => [...prevData, [x, y]]);
+  };
+
+  const handleReset = () => {
+    setData([]);
+  };
 
   return (
     <div style={{ textAlign: 'center' }}>
       <h1>K-Means Clustering Visualization</h1>
-      <ClusterVisualization data={data} labels={labels} centroids={centroids} />
+      <ClusterVisualization
+        data={data}
+        labels={labels}
+        centroids={centroids}
+        onClick={handleSVGClick}
+      />
       <div>
         <label>
           Number of Clusters (k):
@@ -41,6 +57,9 @@ const App: React.FC = () => {
       </div>
       <div>
         <button onClick={runKMeans}>Run K-Means</button>
+      </div>
+      <div>
+        <button onClick={handleReset}>Reset</button>
       </div>
     </div>
   );
