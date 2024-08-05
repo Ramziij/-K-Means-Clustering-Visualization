@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ramziij/-K-Means-Clustering-Visualization.git"
+    "url": "git+https://github.com/Ramziij/K-Means-Clustering-Visualization.git"
   },
   "private": true,
+  "packageManager": "pnpm@8.15.6",
   "author": {
     "name": "KirillRamzaev",
     "email": "kerah304@gmail.com",
@@ -22,7 +23,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "preinstall": "npx only-allow pnpm"
   },
   "eslintConfig": {
     "extends": [
