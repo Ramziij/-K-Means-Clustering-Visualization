@@ -30,13 +30,14 @@ const updateCentroids = (
   for (let i = 0; i < k; i++) {
     const clusterPoints = data.filter((_, j) => labels[j] === i);
     if (clusterPoints.length > 0) {
-      centroids[i] = clusterPoints.reduce(
-        (sum, point) =>
-          sum.map(
-            (coord, index) => coord + point[index] / clusterPoints.length
-          ),
-        [0, 0]
+      const newCentroid = clusterPoints[0].map(
+        (_, index) =>
+          clusterPoints.reduce((sum, point) => sum + point[index], 0) /
+          clusterPoints.length
       );
+      centroids.push(newCentroid);
+    } else {
+      centroids.push(data[Math.floor(Math.random() * data.length)]);
     }
   }
   return centroids;
@@ -58,15 +59,13 @@ export const kmeans = (
   let labels: number[] = new Array(data.length).fill(0);
 
   for (let iter = 0; iter < maxIters; iter++) {
+    const currentCentroids = centroids;
     const oldCentroids = centroids.map((centroid) => [...centroid]);
 
-    // Assign each point to the closest centroid
-    labels = data.map((point) => findClosestCentroid(point, centroids));
+    labels = data.map((point) => findClosestCentroid(point, currentCentroids));
 
-    // Update centroids based on assigned points
     centroids = updateCentroids(data, labels, k);
 
-    // Check for convergence
     if (hasConverged(centroids, oldCentroids)) {
       break;
     }

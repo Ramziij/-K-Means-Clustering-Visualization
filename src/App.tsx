@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { kmeans } from './core/index';
 import ClusterVisualization from './components/ClusterVisualization';
 
@@ -12,10 +12,10 @@ const App: React.FC = () => {
     [97, 110],
   ];
 
-  const [data, setData] = useState<number[][]>(initialData);
-  const [k, setK] = useState(2);
-  const [labels, setLabels] = useState<number[]>([]);
-  const [centroids, setCentroids] = useState<number[][]>([]);
+  const [data, setData] = React.useState<number[][]>(initialData);
+  const [k, setK] = React.useState(2);
+  const [labels, setLabels] = React.useState<number[]>([]);
+  const [centroids, setCentroids] = React.useState<number[][]>([]);
 
   const runKMeans = () => {
     const { labels, centroids } = kmeans(data, k);
@@ -31,7 +31,8 @@ const App: React.FC = () => {
   };
 
   const handleReset = () => {
-    setData([]);
+    setLabels([]);
+    setCentroids([]);
   };
 
   return (
